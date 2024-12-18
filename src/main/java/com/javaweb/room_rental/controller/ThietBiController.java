@@ -33,4 +33,10 @@ public class ThietBiController {
     public ThietBiEntity editThietBi(@PathVariable("thiet-bi-id") long thietBiID, @RequestBody ThietBiDTO thietBiDTO) {
         return thietBiService.editThietBi(thietBiID, thietBiDTO);
     }
+
+    @PutMapping("/thiet-bi/xoa/{thiet-bi-id}")
+    public String xoaThietBi(@PathVariable("thiet-bi-id") long thietBiID, @RequestBody ThietBiDTO thietBiDTO) {
+        thietBiService.deleteThietBi(thietBiID, thietBiDTO);
+        return "Thiết bị đã được xóa";
+    }
 }

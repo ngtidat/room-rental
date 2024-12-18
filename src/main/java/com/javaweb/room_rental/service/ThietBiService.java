@@ -19,7 +19,7 @@ public class ThietBiService {
     private ThietBiMapper thietBiMapper;
 
     public List<ThietBiDTO> getAllThietBi(){
-        List<ThietBiEntity> listThietBiEntity = thietBiRepository.findAll();
+        List<ThietBiEntity> listThietBiEntity = thietBiRepository.findByIsDeleteNot(true);
         return listThietBiEntity.stream()
                             .map(thietBiMapper::toDto)
                             .collect(Collectors.toList());
@@ -40,6 +40,20 @@ public class ThietBiService {
         thietBiEntity.setGhiChu(thietBiDTO.getGhiChu());
 
         return thietBiRepository.save(thietBiEntity);
+    }
+
+    public void deleteThietBi(long id, ThietBiDTO thietBiDTO){
+        ThietBiEntity thietBiEntity = thietBiRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Thiet bi không tồn tại với id: " + id)
+        );
+
+        thietBiEntity.setTen(thietBiDTO.getTen());
+        thietBiEntity.setDonViTinh(thietBiDTO.getDonViTinh());
+        thietBiEntity.setHinhAnh(thietBiDTO.getHinhAnh());
+        thietBiEntity.setGhiChu(thietBiDTO.getGhiChu());
+        thietBiEntity.setDelete(true);
+
+        thietBiRepository.save(thietBiEntity);
     }
 
     public ThietBiDTO getThietBiById(long id){
