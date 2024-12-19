@@ -1,5 +1,7 @@
 package com.javaweb.room_rental.service;
 
+import com.javaweb.room_rental.exception.AppException;
+import com.javaweb.room_rental.exception.ErrorCode;
 import com.javaweb.room_rental.mapper.ThietBiMapper;
 import com.javaweb.room_rental.dto.ThietBiDTO;
 import com.javaweb.room_rental.entity.ThietBiEntity;
@@ -30,8 +32,9 @@ public class ThietBiService {
     }
 
     public ThietBiEntity editThietBi(long id, ThietBiDTO thietBiDTO){
-        ThietBiEntity thietBiEntity = thietBiRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Thiet bi không tồn tại với id: " + id)
+        ThietBiEntity thietBiEntity = thietBiRepository.findById(id)
+                .filter(entity -> !entity.getDelete())
+                .orElseThrow(() -> new AppException(ErrorCode.DEVICE_NOT_EXISTED)
         );
 
         thietBiEntity.setTen(thietBiDTO.getTen());
@@ -43,8 +46,9 @@ public class ThietBiService {
     }
 
     public void deleteThietBi(long id, ThietBiDTO thietBiDTO){
-        ThietBiEntity thietBiEntity = thietBiRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Thiet bi không tồn tại với id: " + id)
+        ThietBiEntity thietBiEntity = thietBiRepository.findById(id)
+                .filter(entity -> !entity.getDelete())
+                .orElseThrow(() -> new AppException(ErrorCode.DEVICE_NOT_EXISTED)
         );
 
         thietBiEntity.setTen(thietBiDTO.getTen());
@@ -57,7 +61,9 @@ public class ThietBiService {
     }
 
     public ThietBiDTO getThietBiById(long id){
-        return thietBiRepository.findById(id).map(thietBiMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy thiết bị với ID: " + id));
+        return thietBiRepository.findById(id)
+                .filter(entity -> !entity.getDelete())
+                .map(thietBiMapper::toDto)
+                .orElseThrow(() -> new AppException(ErrorCode.DEVICE_NOT_EXISTED));
     }
 }

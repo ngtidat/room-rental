@@ -1,10 +1,19 @@
 package com.javaweb.room_rental.dto;
 
+import com.javaweb.room_rental.exception.ErrorCode;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class ThietBiDTO {
     private long id;
+    @NotBlank(message = "NAME_DEVICE_INVALID")
     private String ten;
+    @NotBlank(message = "UNIT_DEVICE_INVALID")
     private String donViTinh;
+    @NotBlank(message = "IMAGE_DEVICE_INVALID")
     private String hinhAnh;
+    @NotBlank(message = "DESC_DEVICE_INVALID")
     private String ghiChu;
 
     public long getId() {
